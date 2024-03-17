@@ -1,76 +1,51 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
-<head>
-    <title>簡易計算機</title>
-    <style>
-        .calculator { 
-            border: 1px solid #999; 
-            border-radius: 5px; 
-            display: inline-block; 
-            padding: 10px; 
-        }
-        input[type="text"], .button { 
-            margin: 5px; 
-        }
-        input[type="text"] { 
-            width: 160px; 
-            text-align: right; 
-        }
-        .button { 
-            width: 35px; 
-            height: 35px; 
-        }
-    </style>
-</head>
-<body>
-    <div class="calculator">
-        <input type="text" id="display" disabled>
-        <br>
-        <button class="button" onclick="clearDisplay()">C</button>
-        <button class="button" onclick="inputValue('1')">1</button>
-        <button class="button" onclick="inputValue('2')">2</button>
-        <button class="button" onclick="inputValue('3')">3</button>
-        <button class="button" onclick="setOperation('+')">+</button>
-        <br>
-        <button class="button" onclick="inputValue('4')">4</button>
-        <button class="button" onclick="inputValue('5')">5</button>
-        <button class="button" onclick="inputValue('6')">6</button>
-        <button class="button" onclick="setOperation('-')">-</button>
-        <br>
-        <button class="button" onclick="inputValue('7')">7</button>
-        <button class="button" onclick="inputValue('8')">8</button>
-        <button class="button" onclick="inputValue('9')">9</button>
-        <button class="button" onclick="setOperation('*')">*</button>
-        <br>
-        <button class="button" onclick="inputValue('0')">0</button>
-        <button class="button" onclick="calculate()">=</button>
-        <button class="button" onclick="setOperation('/')">/</button>
-    </div>
-    <script>
-        let operation = '';
-        let firstValue = '';
-        
-        function clearDisplay() {
-            document.getElementById('display').value = '';
-            firstValue = '';
-            operation = '';
-        }
-        
-        function inputValue(value) {
-            document.getElementById('display').value += value;
-        }
-        
-        function setOperation(op) {
-            firstValue = document.getElementById('display').value;
-            operation = op;
-            document.getElementById('display').value = '';
-        }
-        
-        function calculate() {
-            let secondValue = document.getElementById('display').value;
-            let result = eval(firstValue + operation + secondValue);
-            document.getElementById('display').value = result;
-        }
-    </script>
-</body>
+    <head>
+        <script src="https://aframe.io/releases/1.0.4/aframe.min.js"></script>
+        <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
+        <script src="https://raw.githack.com/donmccurdy/aframe-extras/master/dist/aframe-extras.loaders.min.js"></script>
+        <script src="https://raw.githack.com/AR-js-org/studio-backend/master/src/modules/marker/tools/gesture-detector.js"></script>
+        <script src="https://raw.githack.com/AR-js-org/studio-backend/master/src/modules/marker/tools/gesture-handler.js"></script>
+    </head>
+
+    <body style="margin: 0; overflow: hidden;">
+        <a-scene
+            vr-mode-ui="enabled: false;"
+            loading-screen="enabled: false;"
+            renderer="logarithmicDepthBuffer: true;"
+            arjs="trackingMethod: best; sourceType: webcam; debugUIEnabled: false;"
+            id="scene"
+            embedded
+            gesture-detector
+        >
+            <a-assets>
+                <a-asset-item
+                    id="animated-asset"
+                    src="assets/asset.glb"
+                ></a-asset-item>
+            </a-assets>
+
+            <a-marker
+                id="animated-marker"
+                type="pattern"
+                preset="custom"
+                url="assets/marker.patt"
+                raycaster="objects: .clickable"
+                emitevents="true"
+                cursor="fuse: false; rayOrigin: mouse;"
+                id="markerA"
+            >
+                <a-entity
+                    id="bowser-model"
+                    scale="9.297320456533857 9.297320456533857 9.297320456533857"
+                    animation-mixer="loop: repeat"
+                    gltf-model="#animated-asset"
+                    class="clickable"
+                    gesture-handler
+                ></a-entity>
+            </a-marker>
+
+            <a-entity camera></a-entity>
+        </a-scene>
+    </body>
 </html>
